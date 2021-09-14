@@ -1,0 +1,45 @@
+hive
+
+show databases;
+use 数据库名;
+show tables; 或SHOW TABLES [IN database_name]
+desc 表名;
+desc formatted 表名;
+select * from 表名 where …… limit 30;
+show partitions 表名;
+
+命令行hive -e "……" > XX 重定向到文件
+hive -f filename.sql
+hive -hivevar 变量名1=’a’ -hivevar 变量名2=10 -f filename.hql
+
+建表：
+	1. 先用建表语句建表，再insert数据 (分区表、非分区表都适用)
+	2. create table XX as select …，只适用于非分区表
+	查看建表语句：show create table 表名
+
+插入数据：
+	向分区表中插入数据时，如果是指定分区插入，partition(dt=${current_date}),select里不需要有dt字段
+	如果是动态插入，partition(dt) select …,dt from … select需要有dt字段(放在最后一个)，并且要在配置里设置允许动态插入
+		SET hive.exec.dynamic.partition = true;
+		SET hive.exec.dynamic.partition.mode = nonstrict;
+
+修改表：
+	ALTER TABLE name RENAME TO new_name
+	ALTER TABLE name ADD COLUMNS (col_spec[, col_spec ...])
+	ALTER TABLE name DROP [COLUMN] column_name
+	ALTER TABLE name CHANGE column_name new_name new_type
+	ALTER TABLE name REPLACE COLUMNS (col_spec[, col_spec ...])
+	改表名：ALTER TABLE name RENAME TO new_name
+	改分区名：ALTER TABLE aoftest5.aof_virgo_features_factory_new PARTITION(dt='name1') RENAME TO PARTITION(dt='name2');
+
+删除表：
+	删除数据库[包括表]：DROP DATABASE IF EXISTS XXXXdb [CASCADE(先删除表)];
+	删除表：DROP TABLE IF EXISTS XXXXtable;
+	删除分区：ALTER TABLE XXXXtable DROP IF EXISTS PARTITION (dt='2008-08-08');
+			 ALTER TABLE XXXXtable DROP IF EXISTS PARTITION (dt='2008-08-08', country='us');
+	删除数据库中所有表，但不删除数据库：hive -e "show tables in XXdatabase" | xargs -I '{}' hive -e 'drop table XXdatabase.{}'
+
+复制分区表（直接copy hdfs数据）：
+	1. CREATE TABLE new_table LIKE old_table;
+	2. 使用hadoop fs -cp 命令，把old_table对应的HDFS目录的文件夹全部拷贝到new_table对应的HDFS目录下；
+	3. 使用MSCK REPAIR TABLE new_table;修复新表的分区元数据；（报错时加set hive.msck.path.validation=ignore;）

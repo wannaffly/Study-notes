@@ -1,0 +1,21 @@
+hadoop
+
+反刷单集群默认目录：hdfs://ns1019/user/mart_risk_aof/
+个人目录： hdfs://ns1019/user/mart_risk_aof/personal/fengluyao/（可以直接写成personal/fengluyao/xxx)
+垃圾箱目录：hdfs://ns1019/user/mart_risk_aof/.Trash/Current/user/mart_risk_aof/
+小集群默认目录：hdfs://ns1007/user/mart_sch/
+
+hadoop fs -put [-f强制] 本地文件 目的地址
+hadoop fs -get 要下载的文件 目标目录
+
+hadoop fs -ls [-r] ([-r] #递归列出多层文件夹内容)
+hadoop fs -mkdir [-p] 文件夹 ([-p] #递归创建目录，即使上级目录不存在，会按目录层级自动创建目录)
+hadoop fs -rm [-r] ([-r] #递归删除，可删除有文件的文件夹)
+hadoop fs -mv
+hadoop fs -cp
+hadoop fs -cat
+hadoop fs -cat XXX/part* > ./**
+hadoop fs -dus 目录名 #查看目录占用空间大小（单备份）
+hadoop fs -count(或-du -h) 目录名 #显示目录中所有文件的大小
+hadoop fs -chown/chgrp/chmod #修改文件所属权限
+hadoop job -kill job_XXXX

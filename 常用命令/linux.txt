@@ -1,0 +1,112 @@
+linux
+
+cd 切换文件夹
+	cd /home 绝对路径 以根目录开头
+	cd fly     相对路径 不以根目录开头
+	cd ..   返回上级目录
+	cd ~  回到自己的家目录 /home/fly
+	cd -   电视回看功能
+pwd  查看当前目录
+ls 查看文件目录的内容
+	ls
+	ls –l 显示详细列表 ll 等于ls –l
+	ls –lh 把文件大小以人性化的方式显示
+	ls –a 显示所有文件，包含隐藏文件，隐藏文件是.开头的文件
+	ls –la /home 查看其他目录的内容
+	ls *txt 查看当前目录下的所有以txt结尾的文件
+	drwxrwxr-x. d 代表文件夹 –代表文件
+	rwx rwx r-x  r可读 w可写 x可执行
+	第一组指文件拥有者的权限，第二组代表文件拥有的组的权限，第三组代表其他用户的权限
+mkdir 创建文件夹
+	mkdir tupian 在当前目录下创建文件夹
+	mkdir /home/fly/tupian 以绝对路径创建文件夹
+	mkdir /home/fly/a/tupian 如果上级目录不存在，加上-p自动创建父目录
+	mkdir a b 在当前目录创建多个文件夹
+	mkdir a/{c,d} 在指定目录下创建多个文件夹
+	mkdir abc 以.开头 是创建隐藏文件夹
+touch 创建空文件
+	touch ab.txt 在当前目录下创建，如果指定了目录，必须保证上级目录存在
+	touch .ab 创建隐藏文件
+	gedit abc.txt 使用记事本打开文件
+rm 删除文件
+	rm a.txt 删除文件
+	rm ab –r 删除文件夹
+	rm * -r 不能删除隐藏文件 .和..删除不掉
+clear 清屏
+自动补全
+	Tab键 自动补全
+	上下光标键可以在曾经是用过的命令之间来回切换
+	退出，不执行当前命令按ctrl+c
+Linux终端命令格式
+	1、command [-options] [parameter]
+	2、查询命令帮助
+	--help
+	man command
+cp 拷贝文件
+	cp 1.txt 2.txt
+	cp abc abc_bak –r 拷贝文件夹
+mv 移动、重命名
+	mv 1.txt 2.txt 重命名
+	mv 1.txt ~ 移动到指定目录
+>  重定向
+	Ls > 1.txt 把命令返回的结果输出到文件中，会覆盖之前的数据，默认情况返回的结果是显示在屏幕中
+	ls >> 1.txt 把命令返回的结果输出到文件中，追加的方式
+cat 查看文件内容
+	cat 1.txt 把文件内容全部显示到屏幕中
+	cat 1.txt 2.txt
+	cat 1.txt 2.txt > 3.txt 把多个文件的内容合并到新的文件中
+more 查看文件内容，可以分页显示 
+	ls / >> 1.txt
+	more 1.txt  查看内容多的文件，按空格键往下翻页，按b键往回翻页，按q键退出
+管道 |
+	ls –l / | more 把左边命令返回的结果交给右边命令进行处理
+ln 链接 
+	软链接 软链接本身不存储内容，只记录源文件的名称
+	ln –s 1.txt 1_link 给1.txt创建一个软链接，相当于windows中的快捷方式
+	ln –s 1.txt ~/1_link 给其他目录创建一个软链接，如果源文件不写绝对路径，软链接指向的文件是不存在的
+	ln –s /home/fly/1.txt ~/1_link
+	ln –s abc abc_link 给目录创建软链接
+	硬链接 本身占空间，相当于把源文件复制一份，与源文件同步变化，删除硬链接不影响源文件，不能给目录创建硬链接
+	使用ll查看时，有一个数字，代表有几个文件能同步发生变化
+	ln 1.txt 1_hard_link
+grep 查找文件内容
+	grep hello test.txt  在某个文件中查找包含hello的内容，只要一行中有hello会把整行显示
+	grep –niv hello test.txt  n显示查找到的内容的行号，i查找时不区分大小写，v反向查找，查找不包含关键字
+	grep –n hello /home/fly –r 查找整个目录的所有文件
+find 查找文件
+	find /home –name 1.txt 在/home目录下查找文件名为1.txt的文件
+	find /home –name ‘1.txt’ 在/home目录下查找以.txt结尾的文件
+tar归档 打包
+	打包
+	tar cvf a.tar 1.txt 2.txt   f必须放在最后，f后面的第一个参数代表要生成的文件名，后面所有的参数是要打包的文件
+	列出包里面的文件
+	tar tf a.tar
+	解包
+	tar xvf a.tar 如果没写目录，是把包里的文件解开放到当前目录
+	tar xvf a.tar –C tar 解包到指定的文件夹，文件夹要提前创建好
+	压缩
+		a. 打包 tar cf a.tar *    生成a.tar文件
+		b. 压缩 gzip –r a.tar    生成a.tar.gz文件
+	解压
+		a. 解压 gzip –d a.tar.gz   生成a.tar文件
+		b. 解包 tar xf a.tar –C ~/atar    解包到指定文件夹中
+	一步到位 打包并且压缩
+	    tar czf b.tar.gz *.txt 以gzip的方式打包并且压缩
+	一步到位 解压并且解包
+	    tar xzf b.tar.gz -C btar 以gzip的方式解压并且解包
+	bzip2
+	    tar jcf j.tar.bz2 *txt
+	    tar xjf  j.tar.bz2 -C jtar
+	zip
+	    zip –r zz *.txt   zz代表要生成的压缩文件，不需要写扩展名，会自动生成zip扩展名
+	    unzip –d zz zz.zip   解压时会自动创建目录
+	压缩率 zip<gzip<bzip2
+	通用性 zip>gzip>bzip2
+who 查看当前登录的用户
+	fly   pts/0
+	fly   tty1
+	pts 代表一个终端  tty代表用户登录了操作系统
+	pkiill –kill –t tty1
+关机
+	reboot 不需要权限
+	shutdown 需要root权限

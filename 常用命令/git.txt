@@ -1,0 +1,72 @@
+git
+
+设置global name：
+    git config --global user.name "Mona Lisa"
+    git config --global user.email "email@example.com"
+
+设置单个repository：
+    git config user.name "Mona Lisa"
+    git config user.email "email@example.com"
+    
+基本命令：
+    仓库初始化：git init
+    查看日志：git log
+
+分支：
+	查看本地分支：git branch  
+	查看远程库分支：git branch -a 
+    创建分支： git branch dev_fly
+    切换分支： git checkout dev_fly
+    创建并切换分支： git checkout -b dev_fly
+	删除分支：git branch -d dev_fly
+    本地分支改名：git branch -m [oldname，没有则为当前分支] newname
+
+    git branch --set-upstream-to=origin/master branch_name
+    如果本地新建了一个分支branch_name，但是在远程没有，这时候push和pull指令就无法确定该跟踪谁,一般来说我们都会使其跟踪远程同名分支，可以使用此命令自动在远程创建一个branch_name分支，然后本地分支会track该分支。后面再对该分支使用push和pull就自动同步，无需再指定分支。
+
+commit代码：
+	commit步骤：
+    	1. git status
+    	2. git add . 将工作区的新建/修改添加到暂存区  (git reset HEAD 文件名：撤销add操作)
+    	3. git commit -m "ADD: xxxxxx" 将暂存区内容提交到本地库
+
+	git commit --amend（撤销上一次提交  并将暂存区文件重新提交）
+
+	rebase：合并多个提交为一个提交
+		1. git rebase -i HEAD~3 (会看到三行提交内容)
+		2. 不要动第一行，把下面几行的pick改成s
+		3. 删除所有内容( #开头的可以忽略），然后写一句简短、准确的句子作为这次开发的 commit message
+
+	reset修改撤回：
+		git reset --hard HEAD^ 在本地库移动HEAD指针，一个^表示后退一步，n个表示后退n步
+		git reset --hard 版本号（commit id） 回退到指定版本
+
+	stash暂存修改：
+        git stash 备份当前工作区的内容，保存到git栈中，从最近的一次commit中读取相关内容
+        git stash list  显示git栈中的所有工作区内容的备份，
+        git stash pop 从git栈中获取到最近一次stash进去的内容，恢复工作区的内容。。获取之后，会删除栈中对应的stash。。
+		若本地有改动，想要拉取master分支的改动时做以下操作：
+			git stash
+			git checkout master
+			git pull
+			git checkout dev-fly
+			git branch --set-upstream-to=origin/master dev-fly
+			git pull
+			git stash pop
+
+push代码：
+    git checkout master 切换到master分支
+    git pull
+    git checkout dev_fly (若只有commit ahead，直接git push；否则执行下面)
+    合并master到你的分支：
+    	git pull 解决冲突，
+    	git add .
+    	git commit[再git reset origin/master 一下，然后重新 add commit]
+    git rebase origin/master，若失败解决冲突后，git add .，git rebase --continue
+    
+    git push [-f] origin[远程库别名] dev_fly[分支名] 
+    	-f 强制提交最新版本，会失去之前的所有commit记录
+
+ 
+	
+
